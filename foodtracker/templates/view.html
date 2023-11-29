@@ -140,6 +140,22 @@
                         </table>
                     </div>
                 </div>
+
+                <div class="panel panel-default">
+                <div class="panel-body">
+                    <!-- ... (existing panel-body content) -->
+                </div>
+                <div class="table-responsive">
+                    <!-- ... (existing table content) -->
+                </div>
+                <!-- Chart container -->
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <img src="data:image/png;base64,{{ chart }}" alt="Nutritional Information Chart">
+                    </div>
+                </div>
+                </div>
+
             </div>
         </div>
 
@@ -157,6 +173,45 @@
     <script src="{{ url_for('static', filename='bs/js/jquery.min.js') }}"></script>
     <!-- Bootstrap JavaScript -->
     <script src="{{ url_for('static', filename='bs/js/bootstrap.min.js') }}"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Prepare data for the chart
+        var nutritionData = {
+            labels: ['Protein', 'Carbohydrates', 'Fat', 'Calories'],
+            datasets: [{
+                label: 'Nutritional Information',
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                data: [
+                    {{ totals['protein'] }},
+                    {{ totals['carbs'] }},
+                    {{ totals['fat'] }},
+                    {{ totals['calories'] }}
+                ]
+            }]
+        };
+
+        // Get the canvas element
+        var ctx = document.getElementById('nutritionChart').getContext('2d');
+
+        // Create the chart
+        var nutritionChart = new Chart(ctx, {
+            type: 'bar',
+            data: nutritionData,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

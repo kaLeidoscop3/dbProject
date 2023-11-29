@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+
 from flask import Blueprint, render_template, request, redirect, url_for
 
 from foodtracker.models import Food, Log
@@ -115,7 +119,27 @@ def view(log_id):
         totals['fat'] += food.fats
         totals['calories'] += food.calories
 
-    return render_template('view.html', foods=foods, log=log, totals=totals)
+    # Create a simple bar chart using matplotlib
+    labels = ['Protein', 'Carbohydrates', 'Fat', 'Calories']
+    values = [totals['protein'], totals['carbs'], totals['fat'], totals['calories']]
+
+    plt.figure(figsize=(8, 6))
+    plt.bar(labels, values)
+    plt.xlabel('Nutrients')
+    plt.ylabel('Amount')
+    plt.title('Nutritional Information')
+
+    # Save the chart as an image in memory
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    # Encode the image to base64
+    image_base64 = base64.b64encode(image_png).decode()
+
+    return render_template('view.html', foods=foods, log=log, totals=totals, chart=image_base64)
 
 @main.route('/add_food_to_log/<int:log_id>', methods=['POST'])
 def add_food_to_log(log_id):
