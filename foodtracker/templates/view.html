@@ -142,18 +142,12 @@
                 </div>
 
                 <div class="panel panel-default">
-                <div class="panel-body">
-                    <!-- ... (existing panel-body content) -->
-                </div>
-                <div class="table-responsive">
-                    <!-- ... (existing table content) -->
-                </div>
-                <!-- Chart container -->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <img src="data:image/png;base64,{{ chart }}" alt="Nutritional Information Chart">
+                    <!-- Chart container -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <img src="data:image/png;base64,{{ chart }}" alt="Nutritional Information Chart">
+                        </div>
                     </div>
-                </div>
                 </div>
 
             </div>
@@ -185,18 +179,31 @@
                 backgroundColor: 'rgba(54, 162, 235, 0.5)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
-                data: [
-                    {{ totals['protein'] }},
-                    {{ totals['carbs'] }},
-                    {{ totals['fat'] }},
-                    {{ totals['calories'] }}
+                data: [{
+                        {
+                            totals['protein']
+                        }
+                    },
+                    {
+                        {
+                            totals['carbs']
+                        }
+                    },
+                    {
+                        {
+                            totals['fat']
+                        }
+                    },
+                    {
+                        {
+                            totals['calories']
+                        }
+                    }
                 ]
             }]
         };
-
         // Get the canvas element
         var ctx = document.getElementById('nutritionChart').getContext('2d');
-
         // Create the chart
         var nutritionChart = new Chart(ctx, {
             type: 'bar',
