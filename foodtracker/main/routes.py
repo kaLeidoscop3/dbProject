@@ -1,3 +1,8 @@
+import matplotlib.pyplot as plt
+import io
+import base64
+import numpy as np  # Import NumPy for array operations
+
 from flask import Blueprint, render_template, request, redirect, url_for
 
 from foodtracker.models import Food, Log
@@ -11,7 +16,7 @@ main = Blueprint('main', __name__)
 def index():
     logs = Log.query.order_by(Log.date.desc()).all()
 
-    log_dates = []
+    log_details = []  # Create a list to store log details along with plot URLs
 
     for log in logs:
         proteins = 0
@@ -20,20 +25,39 @@ def index():
         calories = 0
 
         for food in log.foods:
-                proteins += food.proteins
-                carbs += food.carbs
-                fats += food.fats
-                calories += food.calories
+            proteins += food.proteins
+            carbs += food.carbs
+            fats += food.fats
+            calories += food.calories
 
-        log_dates.append({
-            'log_date' : log,
-            'proteins' : proteins,
-            'carbs' : carbs,
-            'fats' : fats,
-            'calories' : calories
+        # Generate plots for each day
+        plt.figure(figsize=(8, 6))
+
+        # Plotting data
+        plt.plot(['Proteins', 'Carbohydrates', 'Fats', 'Calories'],
+                 [proteins, carbs, fats, calories], marker='o')
+
+        plt.title(f'Daily Nutrient Intake on {log.date.strftime("%Y-%m-%d")}')
+        plt.xlabel('Nutrients')
+        plt.ylabel('Amount')
+
+        # Save the plot to a buffer
+        img = io.BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plot_url = base64.b64encode(img.getvalue()).decode()
+        plt.close()
+
+        log_details.append({
+            'log_date': log.date.strftime("%Y-%m-%d"),
+            'proteins': proteins,
+            'carbs': carbs,
+            'fats': fats,
+            'calories': calories,
+            'plot_url': plot_url
         })
 
-    return render_template('index.html', log_dates=log_dates)
+    return render_template('index.html', log_details=log_details)
 
 @main.route('/create_log', methods=['POST'])
 def create_log():

@@ -108,6 +108,28 @@
         </div>
         {% endfor %}
 
+        <div class="row t20">
+            {% for log in log_details %}
+            <div class="col-lg-12">
+                <h4 class="text-center text-white">
+                    <strong>Daily Nutrient Intake on {{ log['log_date'] }}</strong>
+                </h4>
+            </div>
+            <div class="col-lg-6 col-lg-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p>Proteins: {{ log['proteins'] }}</p>
+                        <p>Carbohydrates: {{ log['carbs'] }}</p>
+                        <p>Fats: {{ log['fats'] }}</p>
+                        <p>Calories: {{ log['calories'] }}</p>
+                        <img src="data:image/png;base64,{{ log['plot_url'] }}" alt="Daily Nutrient Intake Plot"
+                            class="img-responsive center-block" />
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
         <footer>
             <div class="row pad">
                 <div class="col-lg-12 text-center">
