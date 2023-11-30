@@ -87,24 +87,45 @@
                             <div class="col-lg-3">
                                 <h4 class="lean-h">
                                     Protein: &nbsp;<strong class="f25">{{ totals['protein'] }}</strong>
+                                    {% if totals['protein'] < 51 %}
+                                    <span class="text-danger"> (Too Little)</span>
+                                    {% elif totals['protein'] > 51 %}
+                                    <span class="text-danger"> (Too Much)</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                             <div class="col-lg-3">
                                 <h4 class="lean-h">
                                     Carbohydrates: <strong class="f25">{{ totals['carbs'] }}</strong>
+                                    {% if totals['carbs'] < 1237 %}
+                                    <span class="text-danger"> (Too Little)</span>
+                                    {% elif totals['carbs'] > 1237 %}
+                                    <span class="text-danger"> (Too Much)</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                             <div class="col-lg-3">
                                 <h4 class="lean-h">
                                     Fat: <strong class="f25">{{ totals['fat'] }}</strong>
+                                    {% if totals['fat'] < 675 %}
+                                    <span class="text-danger"> (Too Little)</span>
+                                    {% elif totals['fat'] > 675 %}
+                                    <span class="text-danger"> (Too Much)</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                             <div class="col-lg-3">
                                 <h4 class="lean-h">
                                     Calories: <strong class="f25">{{ totals['calories'] }}</strong>
+                                    {% if totals['calories'] < 2250 %}
+                                    <span class="text-danger"> (Too Little)</span>
+                                    {% elif totals['calories'] > 2250 %}
+                                    <span class="text-danger"> (Too Much)</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                         </div>
+
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-bordered">
