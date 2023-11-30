@@ -148,6 +148,12 @@
                             <img src="data:image/png;base64,{{ chart }}" alt="Nutritional Information Chart">
                         </div>
                     </div>
+                    <!-- Chart container -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <canvas id="nutritionChart" width="400" height="400"></canvas>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -168,7 +174,7 @@
     <!-- Bootstrap JavaScript -->
     <script src="{{ url_for('static', filename='bs/js/bootstrap.min.js') }}"></script>
     <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='bs/js/chart.js') }}"></script>
 
     <script>
         // Prepare data for the chart
@@ -215,6 +221,21 @@
                             beginAtZero: true
                         }
                     }]
+                }
+            }
+        });
+        // Create the radar chart
+        var nutritionChart = new Chart(ctx, {
+            type: 'radar',
+            data: nutritionData,
+            options: {
+                scale: {
+                    angleLines: {
+                        display: false
+                    },
+                    ticks: {
+                        suggestedMin: 0
+                    }
                 }
             }
         });
