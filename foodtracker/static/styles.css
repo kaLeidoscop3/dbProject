@@ -2,3 +2,78 @@
     color: red;
     font-weight: bold;
 }
+/* Customizing Bootstrap button colors */
+/* Primary button */
+.btn-primary {
+    color: #fff;
+    background-color: #0039A6;
+    border-color: #0039A6;
+}
+
+/* Primary button hover */
+.btn-primary:hover {
+    color: #fff;
+    background-color: #0039A6;
+    border-color: #0039A6;
+}
+
+/* Primary button focus */
+.btn-primary:focus,
+.btn-primary.focus {
+    color: #fff;
+    background-color: #0039A6;
+    border-color: #0039A6;
+    box-shadow: 0 0 0 2px #99c2ff;
+    /* Example of adding a focus shadow */
+}
+/* Custom class for the delete button */
+.custom-delete-btn {
+    background-color: #0039A6;
+    /* Dark blue color */
+    border-color: #0039A6;
+    /* Dark blue border color */
+    color: #fff;
+    /* Text color */
+}
+
+/* Hover effect for the delete button */
+.custom-delete-btn:hover {
+    background-color: #002147;
+    /* Darker blue on hover */
+    border-color: #002147;
+    /* Darker blue border on hover */
+    color: #fff;
+    /* Text color on hover */
+}
+
+/* Custom class for the navigation links */
+.custom-nav-link {
+    color: #0039A6;
+    /* Dark blue color */
+}
+
+/* Hover effect for the navigation links */
+.custom-nav-link:hover {
+    color: #002147;
+    /* Darker blue on hover */
+}
+
+/* Custom class for navigation links */
+.custom-nav-link {
+    color: #0039A6;
+}
+
+/* Hover effect for navigation links */
+.custom-nav-link:hover {
+    color: #002147;
+}
+
+/* Custom class for navigation links */
+.custom-nav-link {
+    color: #0039A6;
+}
+
+/* Hover effect for navigation links */
+.custom-nav-link:hover {
+    color: #002147;
+}
