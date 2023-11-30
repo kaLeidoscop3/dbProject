@@ -53,6 +53,7 @@
                     <div class="panel-body">
                         <form action="{{ url_for('main.add_food_to_log', log_id=log.id) }}" method="POST" role="form">
 
+                            <!-- Existing dropdown for food items -->
                             <div class="form-group">
                                 <label>Add Food</label>
                                 <div class="input-group">
@@ -67,6 +68,27 @@
                                         </button>
                                     </span>
                                 </div>
+                            </div>
+
+                            <!-- Search bar -->
+                            <div class="form-group">
+                                <label>Search Food</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="food-search"
+                                        placeholder="Search for a food item...">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="search-btn">
+                                            Search
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Container for displaying search results -->
+                            <div class="form-group" id="search-results" style="display: none;">
+                                <select class="form-control" id="searched-foods" size="5">
+                                    <!-- Search results will be displayed here -->
+                                </select>
                             </div>
 
                         </form>
@@ -259,6 +281,36 @@
                     }
                 }
             }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const foodSelectDropdown = document.querySelector('select[name="food-select"]');
+            const foodSearchInput = document.getElementById('food-search');
+            const searchButton = document.getElementById('search-btn');
+            const searchResults = document.getElementById('search-results');
+            const searchedFoods = document.getElementById('searched-foods');
+            // Function to filter and display search results
+            const searchFoodItems = () => {
+                const searchTerm = foodSearchInput.value.toLowerCase();
+                const foodOptions = foodSelectDropdown.querySelectorAll('option');
+                // Clear previous search results
+                searchedFoods.innerHTML = '';
+                foodOptions.forEach(option => {
+                    const foodName = option.textContent.toLowerCase();
+                    if (foodName.includes(searchTerm)) {
+                        const clonedOption = option.cloneNode(true);
+                        searchedFoods.appendChild(clonedOption);
+                    }
+                });
+                // Show the search results container
+                searchResults.style.display = 'block';
+            };
+            // Event listener for the search button
+            searchButton.addEventListener('click', searchFoodItems);
+            // Event listener for input changes to trigger search dynamically
+            foodSearchInput.addEventListener('input', searchFoodItems);
         });
     </script>
 </body>
