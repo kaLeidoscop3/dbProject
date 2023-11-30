@@ -53,6 +53,7 @@
                     <div class="panel-body">
                         <form action="{{ url_for('main.add_food_to_log', log_id=log.id) }}" method="POST" role="form">
 
+                            <!-- Existing dropdown for food items -->
                             <div class="form-group">
                                 <label>Add Food</label>
                                 <div class="input-group">
@@ -67,6 +68,27 @@
                                         </button>
                                     </span>
                                 </div>
+                            </div>
+
+                            <!-- Search bar -->
+                            <div class="form-group">
+                                <label>Search Food</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="food-search"
+                                        placeholder="Search for a food item...">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="search-btn">
+                                            Search
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Container for displaying search results -->
+                            <div class="form-group" id="search-results" style="display: none;">
+                                <select class="form-control" id="searched-foods" size="5">
+                                    <!-- Search results will be displayed here -->
+                                </select>
                             </div>
 
                         </form>
@@ -87,24 +109,45 @@
                             <div class="col-lg-3">
                                 <h4 class="lean-h">
                                     Protein: &nbsp;<strong class="f25">{{ totals['protein'] }}</strong>
+                                    {% if totals['protein'] < 51 %}
+                                    <span class="text-danger"> (Too Little)</span>
+                                    {% elif totals['protein'] > 51 %}
+                                    <span class="text-danger"> (Too Much)</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                             <div class="col-lg-3">
                                 <h4 class="lean-h">
                                     Carbohydrates: <strong class="f25">{{ totals['carbs'] }}</strong>
+                                    {% if totals['carbs'] < 1237 %}
+                                    <span class="text-danger"> (Too Little)</span>
+                                    {% elif totals['carbs'] > 1237 %}
+                                    <span class="text-danger"> (Too Much)</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                             <div class="col-lg-3">
                                 <h4 class="lean-h">
                                     Fat: <strong class="f25">{{ totals['fat'] }}</strong>
+                                    {% if totals['fat'] < 675 %}
+                                    <span class="text-danger"> (Too Little)</span>
+                                    {% elif totals['fat'] > 675 %}
+                                    <span class="text-danger"> (Too Much)</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                             <div class="col-lg-3">
                                 <h4 class="lean-h">
                                     Calories: <strong class="f25">{{ totals['calories'] }}</strong>
+                                    {% if totals['calories'] < 2250 %}
+                                    <span class="text-danger"> (Too Little)</span>
+                                    {% elif totals['calories'] > 2250 %}
+                                    <span class="text-danger"> (Too Much)</span>
+                                    {% endif %}
                                 </h4>
                             </div>
                         </div>
+
                     </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover table-bordered">
@@ -140,6 +183,22 @@
                         </table>
                     </div>
                 </div>
+
+                <div class="panel panel-default">
+                    <!-- Chart container -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <img src="data:image/png;base64,{{ chart }}" alt="Nutritional Information Chart">
+                        </div>
+                    </div>
+                    <!-- Chart container -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <canvas id="nutritionChart" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -157,6 +216,108 @@
     <script src="{{ url_for('static', filename='bs/js/jquery.min.js') }}"></script>
     <!-- Bootstrap JavaScript -->
     <script src="{{ url_for('static', filename='bs/js/bootstrap.min.js') }}"></script>
+    <!-- Chart.js -->
+    <script src="{{ url_for('static', filename='bs/js/chart.js') }}"></script>
+
+    <script>
+        // Prepare data for the chart
+        var nutritionData = {
+            labels: ['Protein', 'Carbohydrates', 'Fat', 'Calories'],
+            datasets: [{
+                label: 'Nutritional Information',
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                data: [{
+                        {
+                            totals['protein']
+                        }
+                    },
+                    {
+                        {
+                            totals['carbs']
+                        }
+                    },
+                    {
+                        {
+                            totals['fat']
+                        }
+                    },
+                    {
+                        {
+                            totals['calories']
+                        }
+                    }
+                ]
+            }]
+        };
+        // Get the canvas element
+        var ctx = document.getElementById('nutritionChart').getContext('2d');
+        // Create the chart
+        var nutritionChart = new Chart(ctx, {
+            type: 'bar',
+            data: nutritionData,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        // Create the radar chart
+        var nutritionChart = new Chart(ctx, {
+            type: 'radar',
+            data: nutritionData,
+            options: {
+                scale: {
+                    angleLines: {
+                        display: false
+                    },
+                    ticks: {
+                        suggestedMin: 0
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const foodSelectDropdown = document.querySelector('select[name="food-select"]');
+            const foodSearchInput = document.getElementById('food-search');
+            const searchButton = document.getElementById('search-btn');
+            const searchResults = document.getElementById('search-results');
+            const searchedFoods = document.getElementById('searched-foods');
+            // Function to filter and display search results
+            const searchFoodItems = () => {
+                const searchTerm = foodSearchInput.value.toLowerCase();
+                const foodOptions = foodSelectDropdown.querySelectorAll('option');
+                // Clear previous search results
+                searchedFoods.innerHTML = '';
+                foodOptions.forEach(option => {
+                    const foodName = option.textContent.toLowerCase();
+                    if (foodName.includes(searchTerm)) {
+                        const clonedOption = option.cloneNode(true);
+                        clonedOption.addEventListener('click', () => {
+                            foodSelectDropdown.value = clonedOption.value;
+                            foodSearchInput.value = clonedOption.textContent;
+                            searchResults.style.display = 'none';
+                        });
+                        searchedFoods.appendChild(clonedOption);
+                    }
+                });
+                // Show the search results container
+                searchResults.style.display = 'block';
+            };
+            // Event listener for the search button
+            searchButton.addEventListener('click', searchFoodItems);
+            // Event listener for input changes to trigger search dynamically
+            foodSearchInput.addEventListener('input', searchFoodItems);
+        });
+    </script>
 </body>
 
 </html>
