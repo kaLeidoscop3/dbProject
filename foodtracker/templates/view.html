@@ -36,10 +36,11 @@
                     <div class="col-lg-4 col-lg-offset-4">
                         <ul class="nav nav-pills nav-justified">
                             <li role="presentation">
-                                <a href="{{url_for('main.index')}}" title="Home">Home</a>
+                                <a href="{{url_for('main.index')}}" title="Home" class="custom-nav-link">Home</a>
                             </li>
                             <li role="presentation">
-                                <a href="{{url_for('main.add')}}" title="Add Food Item">Add Food Item</a>
+                                <a href="{{url_for('main.add')}}" title="Add Food Item" class="custom-nav-link">Add Food
+                                    Item</a>
                             </li>
                         </ul>
                     </div>
@@ -173,7 +174,7 @@
                                     <td>{{ food.calories }}</td>
                                     <td>
                                         <a href="{{ url_for('main.remove_food_from_log', log_id=log.id, food_id=food.id) }}"
-                                            class="btn btn-danger btn-xs">
+                                            class="btn btn-danger btn-xs custom-delete-btn">
                                             <i class="glyphicon glyphicon-trash"></i> Delete
                                         </a>
                                     </td>
