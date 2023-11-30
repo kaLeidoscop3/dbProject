@@ -1,5 +1,6 @@
-1. python -m venv env
-2. .\env\Scripts\Activate
-3. pip install flask-sqlalchemy
-4. pip install python-dotenv
-5. flask run
+python -m venv env
+.\env\Scripts\Activate
+pip install flask-sqlalchemy
+pip install python-dotenv
+pip install matplotlib
+flask run
