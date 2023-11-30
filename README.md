@@ -64,7 +64,3 @@ To set up and run the application, follow these steps:
   - Log food items with nutritional information.
   - View nutritional statistics and track daily intake.
   - Categorize food items into breakfast, lunch, dinner, dessert, candies, and drinks.
-
-Feel free to contribute, report issues, or suggest enhancements!
-
-```
