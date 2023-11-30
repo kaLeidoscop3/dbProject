@@ -301,6 +301,11 @@
                     const foodName = option.textContent.toLowerCase();
                     if (foodName.includes(searchTerm)) {
                         const clonedOption = option.cloneNode(true);
+                        clonedOption.addEventListener('click', () => {
+                            foodSelectDropdown.value = clonedOption.value;
+                            foodSearchInput.value = clonedOption.textContent;
+                            searchResults.style.display = 'none';
+                        });
                         searchedFoods.appendChild(clonedOption);
                     }
                 });
